@@ -5,25 +5,22 @@ MAIN_CLASS := main.ControleFaculdade
 DIR_SOURCE := src
 DIR_TARGET := target
 
-SOURCE := $(shell find $(DIR_SOURCE) -type f -name "*.java")
+SOURCE := $(shell find $(DIR_SOURCE) -type f -name *.java)
 OBJECT := $(subst $(DIR_SOURCE),$(DIR_TARGET),$(SOURCE:.java=.class))
 
 APP := $(DIR_TARGET)/$(NAME).jar
 
-.PHONY : all fclean re
+.PHONY : all  clean re
 
 all : $(DIR_TARGET)/$(NAME).jar
 
-re : clean all
-
 clean :
-	rm $(APP)
+	rm -rf $(DIR_TARGET)
 
-fclean :
-	rm -rf $(OBJECT)
+re : clean all
 
 $(APP) : $(OBJECT)
 	jar -cfe $(APP) $(MAIN_CLASS) -C target/ . 
 
-$(DIR_TARGET)/%.class : %.java
-	javac -d target $<
+$(OBJECT) : $(SOURCE)
+	javac -d target/ $(SOURCE)
